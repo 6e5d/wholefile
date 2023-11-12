@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
+#include "../include/wholefile.h"
+
 size_t wholefile_read(char* path, uint8_t** buf) {
 	int fd = open(path, O_RDONLY);
 	struct stat st;
@@ -14,7 +16,7 @@ size_t wholefile_read(char* path, uint8_t** buf) {
 	size_t len = (size_t)st.st_size;
 	*buf = malloc(len + 1);
 	assert(*buf != NULL);
-	assert(read(fd, *buf, len) == len);
+	assert(read(fd, *buf, len) == (ssize_t)len);
 	*(*buf + len) = '\0';
 	assert(close(fd) == 0);
 	return len;

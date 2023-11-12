@@ -4,8 +4,8 @@
 
 #include "../include/wholefile.h"
 
-int main() {
+int main(void) {
 	uint8_t *p = NULL;
-	ssize_t l = wholefile_stdin(&p);
+	size_t l = wholefile_stdin(&p);
 	printf("len: %zu\n", l);
 }
