@@ -1,6 +1,4 @@
 #include <unistd.h>
-#include <stdint.h>
-#include <stdio.h>
 
 #include "../include/wholefile.h"
 

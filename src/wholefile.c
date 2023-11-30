@@ -1,10 +1,5 @@
-#include <assert.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <sys/stat.h>
 
 #include "../include/wholefile.h"
