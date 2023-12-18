@@ -4,29 +4,31 @@
 
 #include "../include/wholefile.h"
 
+typedef struct stat PosixStat;
+
 size_t wholefile_read(char* path, uint8_t** buf) {
 	int fd = open(path, O_RDONLY);
-	struct stat st;
+	PosixStat st;
 	fstat(fd, &st);
 	size_t len = (size_t)st.st_size;
 	*buf = malloc(len + 1);
-	assert(*buf != NULL);
+	if(*buf == NULL) {abort();}
 	if (read(fd, *buf, len) != (ssize_t)len) {
 		fprintf(stderr, "read %s failed\n", path);
 		abort();
 	}
 	*(*buf + len) = '\0';
-	assert(close(fd) == 0);
+	if(close(fd) != 0) {abort();}
 	return len;
 }
 
 size_t wholefile_stdin(uint8_t** buf) {
-	assert(*buf == NULL);
+	if(*buf != NULL) {abort();}
 	size_t cap = 65536;
 	size_t len = 0;
 	while(1) {
 		*buf = realloc(*buf, cap);
-		assert(*buf != NULL);
+		if(*buf == NULL) {abort();}
 		ssize_t s = read(STDIN_FILENO, *buf, cap - len);
 		if (s == -1) {
 			printf("stdin read fail!\n");
@@ -42,6 +44,6 @@ size_t wholefile_stdin(uint8_t** buf) {
 	}
 	*buf = realloc(*buf, len + 1);
 	*(*buf + len) = '\0';
-	assert(*buf != NULL);
+	if(*buf == NULL) {abort();}
 	return len;
 }
