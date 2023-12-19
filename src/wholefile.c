@@ -5,6 +5,7 @@
 #include "../include/wholefile.h"
 
 typedef struct stat PosixStat;
+typedef ssize_t PosixSsizeT;
 
 size_t wholefile_read(char* path, uint8_t** buf) {
 	int fd = open(path, O_RDONLY);
@@ -13,7 +14,7 @@ size_t wholefile_read(char* path, uint8_t** buf) {
 	size_t len = (size_t)st.st_size;
 	*buf = malloc(len + 1);
 	if(*buf == NULL) {abort();}
-	if (read(fd, *buf, len) != (ssize_t)len) {
+	if (read(fd, *buf, len) != (PosixSsizeT)len) {
 		fprintf(stderr, "read %s failed\n", path);
 		abort();
 	}
@@ -29,7 +30,7 @@ size_t wholefile_stdin(uint8_t** buf) {
 	while(1) {
 		*buf = realloc(*buf, cap);
 		if(*buf == NULL) {abort();}
-		ssize_t s = read(STDIN_FILENO, *buf, cap - len);
+		PosixSsizeT s = read(STDIN_FILENO, *buf, cap - len);
 		if (s == -1) {
 			printf("stdin read fail!\n");
 			exit(1);
