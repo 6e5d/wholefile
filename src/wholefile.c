@@ -4,8 +4,8 @@
 
 #include "../include/wholefile.h"
 
-typedef struct stat PosixStat;
-typedef ssize_t PosixSsizeT;
+#define PosixStat struct stat
+#define PosixSsizeT ssize_t
 
 size_t wholefile_read(char* path, uint8_t** buf) {
 	int fd = open(path, O_RDONLY);
