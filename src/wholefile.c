@@ -6,8 +6,9 @@
 
 #define PosixStat struct stat
 #define PosixSsizeT ssize_t
+#define NS_NAME(symbol) com_6e5d_wholefile_##symbol
 
-size_t wholefile_read(char* path, uint8_t** buf) {
+size_t NS_NAME(read)(char* path, uint8_t** buf) {
 	int fd = open(path, O_RDONLY);
 	PosixStat st;
 	fstat(fd, &st);
@@ -23,7 +24,7 @@ size_t wholefile_read(char* path, uint8_t** buf) {
 	return len;
 }
 
-size_t wholefile_stdin(uint8_t** buf) {
+size_t NS_NAME(stdin)(uint8_t** buf) {
 	if(*buf != NULL) {abort();}
 	size_t cap = 65536;
 	size_t len = 0;
@@ -48,3 +49,4 @@ size_t wholefile_stdin(uint8_t** buf) {
 	if(*buf == NULL) {abort();}
 	return len;
 }
+#undef NS_NAME
