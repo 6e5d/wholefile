@@ -4,19 +4,14 @@
 
 #include "../include/wholefile.h"
 
-#define PosixStat stat
-#define PosixSsizeT ssize_t
-#define o_rdonly O_RDONLY
-#define stdin_fileno STDIN_FILENO
-
 size_t wholefile(read)(char* path, uint8_t** buf) {
-	int fd = open(path, o_rdonly);
-	struct PosixStat st;
+	int fd = open(path, O_RDONLY);
+	struct stat st;
 	fstat(fd, &st);
 	size_t len = (size_t)st.st_size;
 	*buf = malloc(len + 1);
 	if(*buf == NULL) {abort();}
-	if (read(fd, *buf, len) != (PosixSsizeT)len) {
+	if (read(fd, *buf, len) != (ssize_t)len) {
 		fprintf(stderr, "read %s failed\n", path);
 		abort();
 	}
@@ -32,7 +27,7 @@ size_t wholefile(stdin)(uint8_t** buf) {
 	while(1) {
 		*buf = realloc(*buf, cap);
 		if(*buf == NULL) {abort();}
-		PosixSsizeT s = read(stdin_fileno, *buf, cap - len);
+		ssize_t s = read(STDIN_FILENO, *buf, cap - len);
 		if (s == -1) {
 			printf("stdin read fail!\n");
 			exit(1);
